@@ -1,4 +1,4 @@
-package inflationmeter.shops;
+package inflationmeter.shops.model;
 
 import lombok.Data;
 import lombok.NonNull;

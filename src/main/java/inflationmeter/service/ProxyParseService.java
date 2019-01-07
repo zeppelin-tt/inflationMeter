@@ -9,8 +9,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.net.Proxy;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,10 +20,18 @@ public class ProxyParseService {
 
     private static final String PROXY_URL = "https://www.proxynova.com/proxy-server-list/country-ru/";
 
-    public List<FreeProxy> getListProxies(Connect connect, Proxy proxy) throws CounterFullException, IOException {
-        Element doc = connect.pretend(PROXY_URL, proxy, ConnectionType.DRIVER);
-        Element tableElement = doc.getElementById("tbl_proxy_list");
-        Elements elementsByTag = tableElement.getElementsByTag("tr");
+    List<FreeProxy> getListProxies(Connect connect) throws CounterFullException {
+        Elements elementsByTag = null;
+        for (int i = 0; i < 10; i++) {
+            try {
+                Element doc = connect.pretend(PROXY_URL, ConnectionType.DRIVER);
+                Element tableElement = doc.getElementById("tbl_proxy_list");
+                elementsByTag = tableElement.getElementsByTag("tr");
+                break;
+            } catch (NullPointerException npe) {
+                log.info("NullPointerException was...");
+            }
+        }
         List<FreeProxy> freeProxies = new ArrayList<>();
         for (int i = 1; i < elementsByTag.size(); i++) {
             FreeProxy freeProxy = new FreeProxy();

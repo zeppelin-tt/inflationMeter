@@ -1,4 +1,4 @@
-package inflationmeter.shops;
+package inflationmeter.shops.model;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -11,5 +11,7 @@ import java.util.List;
 public class Shop {
     @NonNull
     private String shopName;
+    @NonNull
+    private String url;
     private List<Category> categories;
 }
